@@ -1,69 +1,48 @@
-import Image from "next/image";
+import type { Metadata } from "next";
+import Link from "next/link";
 
-export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+export const metadata: Metadata = {
+  title: "Careers at BlueTech",
+  description: "Find work that moves us forward. Explore careers at BlueTech.",
+};
+
+const teams = [
+  { name: "Logistics", roles: "7 open roles", number: "01" },
+  { name: "Finance", roles: "6 open roles", number: "02" },
+  { name: "Operations", roles: "6 open roles", number: "03" },
+  { name: "People & Culture", roles: "5 open roles", number: "04" },
+];
+
+export default function HomePage() {
+  return <main className="main-content home-page">
+    <section className="home-hero">
+      <div className="hero-copy">
+        <div className="intro-kicker"><span /> CAREERS AT BLUETECH</div>
+        <h1>Good work<br />moves us <em>forward.</em></h1>
+        <p>Bring your perspective. Build practical solutions. Find a place where your work makes a difference to the people around you.</p>
+        <div className="hero-actions"><Link className="search-button" href="/jobs">Explore open roles <span aria-hidden="true">↗</span></Link><Link className="text-link" href="/about">Get to know us <span aria-hidden="true">→</span></Link></div>
+      </div>
+      <div className="hero-aside" aria-label="BlueTech careers overview">
+        <div className="hero-aside-top"><span className="status-dot" /> GROW WITH US</div>
+        <div className="hero-stat"><strong>24</strong><span>ways to make<br />an impact</span></div>
+        <div className="hero-rule" />
+        <div className="hero-aside-bottom"><span>01 / 04</span><span>Teams that keep<br />business moving</span></div>
+        <div className="hero-lines" aria-hidden="true"><i /><i /><i /><i /><i /><i /><i /><i /><i /></div>
+      </div>
+    </section>
+
+    <section className="home-teams" aria-labelledby="teams-title">
+      <div className="section-heading">
+        <div><div className="about-label">FIND YOUR PLACE</div><h2 id="teams-title">Different strengths.<br />One direction.</h2></div>
+        <p>From the warehouse floor to the finance team, we bring together different skills to make better work happen.</p>
+      </div>
+      <div className="team-list">
+        {teams.map((team) => <Link className="team-row" href={`/jobs?department=${encodeURIComponent(team.name === "People & Culture" ? "HR" : team.name)}`} key={team.number}>
+          <span className="team-number">{team.number}</span><strong>{team.name}</strong><span className="team-roles">{team.roles}</span><span className="team-arrow" aria-hidden="true">↗</span>
+        </Link>)}
+      </div>
+    </section>
+
+    <section className="home-callout"><div><div className="about-label">YOUR NEXT CHAPTER</div><h2>There’s room to do<br />your best work here.</h2></div><Link href="/jobs">See all open positions <span aria-hidden="true">↗</span></Link></section>
+  </main>;
 }
