@@ -7,12 +7,12 @@ pnpm monorepo containing two independent systems. Each system has a Next.js fron
 ```
 BlueTech/
 ├── apps/
-│   ├── system-a/
-│   │   ├── frontend/        # Next.js (system-a-frontend)
-│   │   └── backend/         # NestJS  (system-a-backend)
-│   └── system-b/
-│       ├── frontend/        # Next.js (system-b-frontend)
-│       └── backend/         # NestJS  (system-b-backend)
+│   ├── BlueTech-JobBoard/
+│   │   ├── web/             # Next.js (bluetech-jobboard-web)
+│   │   └── api/             # NestJS  (bluetech-jobboard-api)
+│   └── BlueTech-HRMS/
+│       ├── web/             # Next.js (bluetech-hrms-web)
+│       └── api/             # NestJS  (bluetech-hrms-api)
 ├── packages/                # reserved for shared code
 ├── .gitignore
 ├── package.json
@@ -24,10 +24,10 @@ BlueTech/
 
 | App | Package | Port |
 |---|---|---|
-| System A frontend | system-a-frontend | 3000 |
-| System A backend | system-a-backend | 4000 |
-| System B frontend | system-b-frontend | 3001 |
-| System B backend | system-b-backend | 5000 |
+| JobBoard frontend | bluetech-jobboard-web | 3000 |
+| JobBoard backend | bluetech-jobboard-api | 4000 |
+| HRMS frontend | bluetech-hrms-web | 3001 |
+| HRMS backend | bluetech-hrms-api | 5000 |
 
 Each backend exposes `GET /health`, which returns `{"status":"ok"}`.
 
@@ -42,10 +42,10 @@ pnpm install
 Then create the local env files from the committed examples:
 
 ```bash
-cp apps/system-a/backend/.env.example  apps/system-a/backend/.env
-cp apps/system-b/backend/.env.example  apps/system-b/backend/.env
-cp apps/system-a/frontend/.env.example apps/system-a/frontend/.env.local
-cp apps/system-b/frontend/.env.example apps/system-b/frontend/.env.local
+cp apps/BlueTech-JobBoard/api/.env.example  apps/BlueTech-JobBoard/api/.env
+cp apps/BlueTech-HRMS/api/.env.example  apps/BlueTech-HRMS/api/.env
+cp apps/BlueTech-JobBoard/web/.env.example apps/BlueTech-JobBoard/web/.env.local
+cp apps/BlueTech-HRMS/web/.env.example apps/BlueTech-HRMS/web/.env.local
 ```
 
 ## Run
@@ -53,8 +53,8 @@ cp apps/system-b/frontend/.env.example apps/system-b/frontend/.env.local
 | Command | What it starts |
 |---|---|
 | `pnpm dev` | All four apps |
-| `pnpm dev:a` | System A frontend and backend |
-| `pnpm dev:b` | System B frontend and backend |
+| `pnpm dev:jobboard` | JobBoard frontend and backend |
+| `pnpm dev:hrms` | HRMS frontend and backend |
 | `pnpm build` | Builds all four apps |
 
-To run a single app, use a filter, e.g. `pnpm --filter system-a-backend dev`.
+To run a single app, use a filter, e.g. `pnpm --filter bluetech-jobboard-api dev`.

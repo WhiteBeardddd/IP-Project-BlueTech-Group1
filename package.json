@@ -3,8 +3,8 @@
   "private": true,
   "scripts": {
     "dev": "pnpm -r --parallel dev",
-    "dev:a": "pnpm --filter \"system-a-*\" --parallel dev",
-    "dev:b": "pnpm --filter \"system-b-*\" --parallel dev",
+    "dev:jobboard": "pnpm --filter \"bluetech-jobboard-*\" --parallel dev",
+    "dev:hrms": "pnpm --filter \"bluetech-hrms-*\" --parallel dev",
     "build": "pnpm -r build"
   },
   "packageManager": "pnpm@12.6.0"

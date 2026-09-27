@@ -7,12 +7,12 @@ Set up a pnpm monorepo containing two independent systems. Each system has a Nex
 ```
 BlueTech/                    # repo root (Desktop/BlueTech)
 ├── apps/
-│   ├── system-a/
-│   │   ├── frontend/        # Next.js, port 3000
-│   │   └── backend/         # NestJS, port 4000
-│   └── system-b/
-│       ├── frontend/        # Next.js, port 3001
-│       └── backend/         # NestJS, port 5000
+│   ├── BlueTech-JobBoard/
+│   │   ├── web/             # Next.js, port 3000
+│   │   └── api/             # NestJS, port 4000
+│   └── BlueTech-HRMS/
+│       ├── web/             # Next.js, port 3001
+│       └── api/             # NestJS, port 5000
 ├── packages/                # reserved for shared code, leave empty for now
 ├── .gitignore
 ├── package.json
@@ -35,7 +35,7 @@ The repo root is the current working directory (`Desktop/BlueTech/`). Do not cre
 ```bash
 git init
 pnpm init
-mkdir -p apps/system-a apps/system-b packages
+mkdir -p apps/BlueTech-JobBoard apps/BlueTech-HRMS packages
 ```
 
 Create `pnpm-workspace.yaml`:
@@ -60,10 +60,10 @@ coverage
 ## Step 2: Scaffold the Frontends
 
 ```bash
-cd apps/system-a
-pnpm create next-app@latest frontend --ts --eslint --app --src-dir --use-pnpm --skip-install --yes
-cd ../system-b
-pnpm create next-app@latest frontend --ts --eslint --app --src-dir --use-pnpm --skip-install --yes
+cd apps/BlueTech-JobBoard
+pnpm create next-app@latest web --ts --eslint --app --src-dir --use-pnpm --skip-install --yes
+cd ../BlueTech-HRMS
+pnpm create next-app@latest web --ts --eslint --app --src-dir --use-pnpm --skip-install --yes
 cd ../..
 ```
 
@@ -72,10 +72,10 @@ If the CLI prompts despite the flags, accept defaults for anything not listed ab
 ## Step 3: Scaffold the Backends
 
 ```bash
-cd apps/system-a
-pnpm dlx @nestjs/cli new backend --package-manager pnpm --skip-git --skip-install
-cd ../system-b
-pnpm dlx @nestjs/cli new backend --package-manager pnpm --skip-git --skip-install
+cd apps/BlueTech-JobBoard
+pnpm dlx @nestjs/cli new api --package-manager pnpm --skip-git --skip-install
+cd ../BlueTech-HRMS
+pnpm dlx @nestjs/cli new api --package-manager pnpm --skip-git --skip-install
 cd ../..
 ```
 
@@ -95,19 +95,19 @@ Set the `name` field in each app's `package.json`:
 
 | Path | name |
 |---|---|
-| apps/system-a/frontend | system-a-frontend |
-| apps/system-a/backend | system-a-backend |
-| apps/system-b/frontend | system-b-frontend |
-| apps/system-b/backend | system-b-backend |
+| apps/BlueTech-JobBoard/web | bluetech-jobboard-web |
+| apps/BlueTech-JobBoard/api | bluetech-jobboard-api |
+| apps/BlueTech-HRMS/web | bluetech-hrms-web |
+| apps/BlueTech-HRMS/api | bluetech-hrms-api |
 
 Set the `dev` script in each app's `package.json`:
 
 | App | dev script |
 |---|---|
-| system-a-frontend | `next dev -p 3000` |
-| system-b-frontend | `next dev -p 3001` |
-| system-a-backend | `nest start --watch` |
-| system-b-backend | `nest start --watch` |
+| bluetech-jobboard-web | `next dev -p 3000` |
+| bluetech-hrms-web | `next dev -p 3001` |
+| bluetech-jobboard-api | `nest start --watch` |
+| bluetech-hrms-api | `nest start --watch` |
 
 Keep all other scripts the generators created.
 
@@ -116,8 +116,8 @@ Keep all other scripts the generators created.
 Install the config module in both backends:
 
 ```bash
-pnpm --filter system-a-backend add @nestjs/config
-pnpm --filter system-b-backend add @nestjs/config
+pnpm --filter bluetech-jobboard-api add @nestjs/config
+pnpm --filter bluetech-hrms-api add @nestjs/config
 ```
 
 In each backend's `src/app.module.ts`, add `ConfigModule` to imports:
@@ -160,13 +160,13 @@ health() {
 
 Create both `.env` and `.env.example` with identical contents in each backend:
 
-`apps/system-a/backend/.env`
+`apps/BlueTech-JobBoard/api/.env`
 ```
 PORT=4000
 FRONTEND_URL=http://localhost:3000
 ```
 
-`apps/system-b/backend/.env`
+`apps/BlueTech-HRMS/api/.env`
 ```
 PORT=5000
 FRONTEND_URL=http://localhost:3001
@@ -174,12 +174,12 @@ FRONTEND_URL=http://localhost:3001
 
 Create both `.env.local` and `.env.example` in each frontend:
 
-`apps/system-a/frontend/.env.local`
+`apps/BlueTech-JobBoard/web/.env.local`
 ```
 NEXT_PUBLIC_API_URL=http://localhost:4000
 ```
 
-`apps/system-b/frontend/.env.local`
+`apps/BlueTech-HRMS/web/.env.local`
 ```
 NEXT_PUBLIC_API_URL=http://localhost:5000
 ```
@@ -196,8 +196,8 @@ Update the root `package.json`:
   "private": true,
   "scripts": {
     "dev": "pnpm -r --parallel dev",
-    "dev:a": "pnpm --filter \"system-a-*\" --parallel dev",
-    "dev:b": "pnpm --filter \"system-b-*\" --parallel dev",
+    "dev:jobboard": "pnpm --filter \"bluetech-jobboard-*\" --parallel dev",
+    "dev:hrms": "pnpm --filter \"bluetech-hrms-*\" --parallel dev",
     "build": "pnpm -r build"
   }
 }
@@ -213,7 +213,7 @@ pnpm install
 
 ## Step 10: README
 
-Create a root `README.md` that covers the folder structure, the port table, how to install, and how to run `pnpm dev`, `pnpm dev:a`, and `pnpm dev:b`.
+Create a root `README.md` that covers the folder structure, the port table, how to install, and how to run `pnpm dev`, `pnpm dev:jobboard`, and `pnpm dev:hrms`.
 
 ## Verification
 
